@@ -20,7 +20,7 @@ module datapath(
     input  logic        memtoregD, memwriteD,
     input  logic        alusrcD, regdstD, regwriteD,
     input  logic        jumpD, branchD,
-    input  logic        jalD, jrD,          // NEW: jal and jr control signals
+    input  logic        jalD, jrD,          
     input  logic [3:0]  alucontrolD,
 
     output logic [31:0] instrD,
@@ -34,7 +34,8 @@ module datapath(
     output logic [4:0]  writeregE, writeregM, writeregW,
     output logic        regwriteE, regwriteM, regwriteW,
     output logic        memtoregE, memtoregM,
-    output logic        memwriteM_out
+    output logic        memwriteM_out,
+    output logic        jalE_out, jalM_out, jalW_out
 );
 
     // --- FETCH STAGE ---
@@ -142,7 +143,7 @@ module datapath(
     logic [31:0] aluoutE;
     logic zeroE;
     
-    mux3 #(32) forwardamux(srcaE, resultW, aluoutM, forwardaE, srca2E);
+        mux3 #(32) forwardamux(srcaE, resultW, aluoutM, forwardaE, srca2E);
     mux3 #(32) forwardbmux(srcbE, resultW, aluoutM, forwardbE, srcb2E);
     mux2 #(32) srcbmux(srcb2E, signimmE, alusrcE, srcb3E);
     alu alu(clk, srca2E, srcb3E, alucontrolE, aluoutE, zeroE);
@@ -150,14 +151,14 @@ module datapath(
     logic [4:0] writeregE_normal;
     mux2 #(5) wrmux(rtE, rdE, regdstE, writeregE_normal);
     assign writeregE = jalE ? 5'd31 : writeregE_normal;
-
+ 
     // Exception tracking Register
     logic [31:0] EPC;
     always_ff @(posedge clk or posedge reset) begin
         if (reset)           EPC <= 32'b0;
         else if (Exception_Flag) EPC <= pcplus4D - 32'd4;
     end
-
+ 
     // --- EX/MEM REGISTER ---
     logic        jalM;                       // NEW: pipeline jal to MEM
     logic [31:0] pcplus4M;                  // NEW: pipeline pcplus4 to MEM
@@ -182,7 +183,7 @@ module datapath(
             pcplus4M      <= pcplus4E;      // NEW
         end
     end
-
+ 
     // --- MEM/WB REGISTER ---
     logic        memtoregW, jalW;           // NEW: jalW
     logic [31:0] readdataW, aluoutW, pcplus4W; // NEW: pcplus4W
@@ -205,9 +206,13 @@ module datapath(
             pcplus4W  <= pcplus4M;          // NEW
         end
     end
-
+ 
     // NEW: jal selects pcplus4W as writeback result instead of ALU/memory
     mux3 #(32) resmux(aluoutW, readdataW, pcplus4W, {jalW, memtoregW}, resultW);
+ 
+    assign jalE_out = jalE;
+    assign jalM_out = jalM;
+    assign jalW_out = jalW;
 
 endmodule
 

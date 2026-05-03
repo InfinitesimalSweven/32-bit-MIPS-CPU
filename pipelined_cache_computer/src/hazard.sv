@@ -7,6 +7,7 @@ module hazard (
     input  logic       regwriteE, regwriteM, regwriteW,
     input  logic       memtoregE, memtoregM,
     input  logic       branchD,
+    input  logic       jalE, jalM, jalW,
     input  logic       intr,
     input  logic       mem_stall,
     output logic       forwardaD, forwardbD,
@@ -15,25 +16,30 @@ module hazard (
     output logic       Exception_Flag
 );
 
+    logic [4:0] effWriteregE, effWriteregM, effWriteregW;
+    assign effWriteregE = jalE ? 5'd31 : writeregE;
+    assign effWriteregM = jalM ? 5'd31 : writeregM;
+    assign effWriteregW = jalW ? 5'd31 : writeregW;
+
     // 1. Forwarding to Execute stage (ALU inputs)
     always_comb begin
         forwardaE = 2'b00;
         forwardbE = 2'b00;
 
         if (rsE != 0) begin
-            if (rsE == writeregM && regwriteM) forwardaE = 2'b10;
-            else if (rsE == writeregW && regwriteW) forwardaE = 2'b01;
+            if (rsE == effWriteregM && regwriteM) forwardaE = 2'b10;
+            else if (rsE == effWriteregW && regwriteW) forwardaE = 2'b01;
         end
 
         if (rtE != 0) begin
-            if (rtE == writeregM && regwriteM) forwardbE = 2'b10;
-            else if (rtE == writeregW && regwriteW) forwardbE = 2'b01;
+            if (rtE == effWriteregM && regwriteM) forwardbE = 2'b10;
+            else if (rtE == effWriteregW && regwriteW) forwardbE = 2'b01;
         end
     end
 
     // 2. Forwarding to Decode stage (Branch equality checks)
-    assign forwardaD = (rsD != 0) && (rsD == writeregM) && regwriteM;
-    assign forwardbD = (rtD != 0) && (rtD == writeregM) && regwriteM;
+    assign forwardaD = (rsD != 0) && (rsD == effWriteregM) && regwriteM;
+    assign forwardbD = (rtD != 0) && (rtD == effWriteregM) && regwriteM;
 
     // 3. Stalls
     logic lwstall;
