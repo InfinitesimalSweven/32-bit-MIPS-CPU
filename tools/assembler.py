@@ -11,9 +11,9 @@ registers = {
     '$0': 0, '$2': 2, '$3': 3, '$4': 4, '$5': 5, '$7': 7, '$8': 8, '$9': 9
 }
 
-r_type = {'add': 0x20, 'sub': 0x22, 'and': 0x24, 'or': 0x25, 'slt': 0x2A, 'mult': 0x18, 'mflo': 0x12, 'mfhi': 0x10}
+r_type = {'add': 0x20, 'sub': 0x22, 'and': 0x24, 'or': 0x25, 'slt': 0x2A, 'mult': 0x18, 'mflo': 0x12, 'mfhi': 0x10, 'jr': 0x08}
 i_type = {'lw': 0x23, 'sw': 0x2B, 'beq': 0x04, 'addi': 0x08}
-j_type = {'j': 0x02}
+j_type = {'j': 0x02, 'jal': 0x03}
 
 def get_reg(v):
     if v in registers: return registers[v]
@@ -68,6 +68,9 @@ def assemble(asm_file, exe_file):
                 rd = get_reg(parts[1])
                 rs = 0
                 rt = 0
+            elif op == 'jr':
+                rs = get_reg(parts[1])
+                rt, rd = 0, 0
             else:
                 # op rd, rs, rt
                 rd = get_reg(parts[1])

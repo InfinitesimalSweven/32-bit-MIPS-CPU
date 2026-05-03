@@ -16,6 +16,7 @@ module cpu(
 );
     logic [31:0] instrD;
     logic branchD, jumpD;
+    logic jalD, jrD;
     logic memtoregD, memwriteD, alusrcD, regdstD, regwriteD;
     logic [3:0] alucontrolD;
     
@@ -33,6 +34,7 @@ module cpu(
         .memtoregD(memtoregD), .memwriteD(memwriteD),
         .alusrcD(alusrcD), .regdstD(regdstD), .regwriteD(regwriteD),
         .branchD(branchD), .jumpD(jumpD),
+        .jalD(jalD), .jrD(jrD),
         .alucontrolD(alucontrolD)
     );
 
@@ -44,7 +46,7 @@ module cpu(
         // From Controller
         .memtoregD(memtoregD), .memwriteD(memwriteD),
         .alusrcD(alusrcD), .regdstD(regdstD), .regwriteD(regwriteD),
-        .branchD(branchD), .jumpD(jumpD), .alucontrolD(alucontrolD),
+        .branchD(branchD), .jumpD(jumpD), .jalD(jalD), .jrD(jrD), .alucontrolD(alucontrolD),
         // To Controller
         .instrD(instrD),
         // From Hazard Unit

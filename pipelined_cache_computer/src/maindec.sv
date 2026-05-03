@@ -7,12 +7,16 @@ module maindec
     // ---------------- PORT DEFINITIONS ----------------
     //
     input  logic [5:0] op,
+    input  logic [5:0] funct,
     output logic       memtoreg, memwrite,
     output logic       branch, alusrc,
     output logic       regdst, regwrite,
     output logic       jump,
+    output logic       jal,
+    output logic       jr,
     output logic [1:0] aluop
 );
+
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
@@ -22,6 +26,9 @@ module maindec
     assign {regwrite, regdst, alusrc, branch, memwrite,
             memtoreg, jump, aluop} = controls;
 
+    assign jal = (op == 6'b000011);
+    assign jr  = (op == 6'b000000) && (funct == 6'b001000);
+
     always @* begin
         case(op)
             6'b000000: controls <= 9'b110000010; // RTYPE
@@ -30,6 +37,7 @@ module maindec
             6'b000100: controls <= 9'b000100001; // BEQ
             6'b001000: controls <= 9'b101000000; // ADDI
             6'b000010: controls <= 9'b000000100; // J
+            6'b000011: controls <= 9'b100000100; // JAL
             default:   controls <= 9'b000000000; // illegal operation defaults to NOP logic to prevent X cascades
         endcase
     end

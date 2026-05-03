@@ -30,6 +30,7 @@ module aludec
                 6'b011010: alucontrol <= 4'b1001; // div
                 6'b010010: alucontrol <= 4'b0100; // mflo
                 6'b010000: alucontrol <= 4'b0101; // mfhi
+                6'b001000: alucontrol <= 4'b0010; // jr (result discarded)
                 default:   alucontrol <= 4'b0010; // default to add to prevent X propagation on NOP
             endcase
         endcase
