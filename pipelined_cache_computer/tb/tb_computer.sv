@@ -2,17 +2,6 @@
 `define TB_COMPUTER_SV
 
 `include "_timescale.sv"
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2026
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2026-04-09
-//     Module Name: tb_computer
-//     Description: Testbench for the Pipelined MIPS CPU
-//////////////////////////////////////////////////////////////////////////////////
-
-
 `include "computer.sv"
 
 module tb_computer;

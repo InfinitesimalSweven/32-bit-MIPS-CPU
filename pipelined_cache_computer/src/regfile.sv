@@ -1,19 +1,6 @@
 `ifndef REGFILE_SV
 `define REGFILE_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2026
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2023-02-07
-//     Module Name: regfile
-//     Description: 32-bit RISC register file (MIPS)
-//
-// Revision: 1.0
-//
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module regfile(
     input  logic        clk, 

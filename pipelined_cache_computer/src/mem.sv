@@ -1,8 +1,6 @@
 `ifndef MEM_SV
 `define MEM_SV
 
-
-
 module mem
     #(parameter n = 32, parameter r = 8)(
     input  logic           clk, we,

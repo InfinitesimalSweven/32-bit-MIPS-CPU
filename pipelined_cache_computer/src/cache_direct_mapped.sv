@@ -1,22 +1,6 @@
 `ifndef CACHE_DIRECT_MAPPED_SV
 `define CACHE_DIRECT_MAPPED_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2026
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2026-04-23
-//     Module Name: cache_direct_mapped
-//     Description: 16-word Direct-Mapped Cache
-//                  - 1 word (4 bytes) per block.
-//                  - 16 blocks total.
-//                  - 32-bit Address Breakdown:
-//                      Offset: 2 bits (bytes within word, addr[1:0])
-//                      Index:  4 bits (16 blocks, addr[5:2])
-//                      Tag:    26 bits (addr[31:6])
-//////////////////////////////////////////////////////////////////////////////////
-
 module cache_direct_mapped (
     input  logic        clk,
     input  logic        reset,

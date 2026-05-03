@@ -1,20 +1,6 @@
 `ifndef DFF_SV
 `define DFF_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2023
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2023-02-07
-//     Module Name: dff
-//     Description: 32 bit D flip flop
-//
-// Revision: 1.0
-//
-//////////////////////////////////////////////////////////////////////////////////
-
-
 module dff
     #(parameter n = 32)(
     //

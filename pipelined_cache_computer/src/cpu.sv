@@ -1,16 +1,6 @@
 `ifndef CPU_SV
 `define CPU_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2026
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2026-04-09
-//     Module Name: cpu
-//     Description: 32-bit Pipelined CPU wrapper
-//////////////////////////////////////////////////////////////////////////////////
-
 
 `include "controller.sv"
 `include "datapath.sv"

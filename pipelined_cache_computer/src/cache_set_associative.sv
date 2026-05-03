@@ -1,23 +1,6 @@
 `ifndef CACHE_SET_ASSOCIATIVE_SV
 `define CACHE_SET_ASSOCIATIVE_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2026
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2026-04-23
-//     Module Name: cache_set_associative
-//     Description: 16-word 2-Way Set-Associative Cache
-//                  - 1 word (4 bytes) per block.
-//                  - 16 blocks total, 8 sets (2 blocks per set).
-//                  - 32-bit Address Breakdown:
-//                      Offset: 2 bits (addr[1:0])
-//                      Index:  3 bits (8 sets, addr[4:2])
-//                      Tag:    27 bits (addr[31:5])
-//                  - Uses LRU (Least Recently Used) replacement policy per set.
-//////////////////////////////////////////////////////////////////////////////////
-
 module cache_set_associative (
     input  logic        clk,
     input  logic        reset,

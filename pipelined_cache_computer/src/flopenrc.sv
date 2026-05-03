@@ -1,20 +1,6 @@
 `ifndef FLOPENRC_SV
 `define FLOPENRC_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2026
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2023-02-07
-//     Module Name: flopenrc
-//     Description: 32-bit D-Flip-Flop with Enable, Reset, and Synchronous Clear
-//
-// Revision: 1.0
-//
-//////////////////////////////////////////////////////////////////////////////////
-
-
 module flopenrc
     #(parameter n = 32)(
     input  logic             clk, reset,

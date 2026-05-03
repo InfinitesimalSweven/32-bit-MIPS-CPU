@@ -1,19 +1,6 @@
 `ifndef ALUDEC_SV
 `define ALUDEC_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2023
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2023-02-07
-//     Module Name: aludec
-//     Description: 32-bit RISC ALU decoder
-//
-// Revision: 1.0
-//
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module aludec
     #(parameter n = 32)(

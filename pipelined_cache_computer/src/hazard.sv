@@ -1,18 +1,6 @@
 `ifndef HAZARD_SV
 `define HAZARD_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2026
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2026-04-09
-//     Module Name: hazard
-//     Description: Hazard Unit for 5-stage Pipelined MIPS
-//
-//////////////////////////////////////////////////////////////////////////////////
-
-
 module hazard (
     input  logic [4:0] rsD, rtD, rsE, rtE,
     input  logic [4:0] writeregE, writeregM, writeregW,

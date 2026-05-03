@@ -1,19 +1,6 @@
 `ifndef MUX2_SV
 `define MUX2_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2023
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2023-02-07
-//     Module Name: mux2
-//     Description: 2 to 1 multiplexer
-//
-// Revision: 1.0
-//
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module mux2
     #(parameter n = 32)(

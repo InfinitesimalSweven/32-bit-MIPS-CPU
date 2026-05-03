@@ -1,17 +1,6 @@
 `ifndef DATAPATH_SV
 `define DATAPATH_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2026
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2026-04-09
-//     Module Name: datapath
-//     Description: 32-bit Pipelined Datapath CPU
-//////////////////////////////////////////////////////////////////////////////////
-
-
 `include "regfile.sv"
 `include "alu.sv"
 `include "adder.sv"

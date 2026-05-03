@@ -1,20 +1,6 @@
 `ifndef MAINDEC_SV
 `define MAINDEC_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2023
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2023-02-07
-//     Module Name: maindec
-//     Description: 32-bit RISC-based CPU main decoder (MIPS)
-//
-// Revision: 1.0
-//
-//////////////////////////////////////////////////////////////////////////////////
-
-
 module maindec
     #(parameter n = 32)(
     //

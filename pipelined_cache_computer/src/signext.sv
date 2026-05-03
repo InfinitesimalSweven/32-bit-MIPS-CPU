@@ -1,20 +1,6 @@
 `ifndef SIGNEXT_SV
 `define SIGNEXT_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2023
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2023-02-07
-//     Module Name: signext
-//     Description: 16 to 32 bit sign extender
-//
-// Revision: 1.0
-//
-//////////////////////////////////////////////////////////////////////////////////
-
-
 module signext
     #(parameter n = 32, i = 16)(
     //

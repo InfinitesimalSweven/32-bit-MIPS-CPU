@@ -1,20 +1,6 @@
 `ifndef CACHE_FULLY_ASSOCIATIVE_SV
 `define CACHE_FULLY_ASSOCIATIVE_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2026
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2026-04-23
-//     Module Name: cache_fully_associative
-//     Description: 16-word Fully Associative Cache
-//                  - 1 word (4 bytes) per block.
-//                  - 16 blocks total.
-//                  - No Index. Tag is 30 bits.
-//                  - Uses a simple FIFO/Round-Robin replacement policy.
-//////////////////////////////////////////////////////////////////////////////////
-
 module cache_fully_associative (
     input  logic        clk,
     input  logic        reset,

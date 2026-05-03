@@ -1,19 +1,6 @@
 `ifndef IMEM_SV
 `define IMEM_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2023
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2023-02-07
-//     Module Name: imem
-//     Description: 32-bit RISC memory (instruction "text" segment)
-//
-// Revision: 1.0
-//
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module imem
 // n=bit length of register; r=bit length of addr to limit memory and not crash your verilog emulator

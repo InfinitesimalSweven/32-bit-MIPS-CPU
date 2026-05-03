@@ -1,17 +1,6 @@
 `ifndef COMPUTER_SV
 `define COMPUTER_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2026
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2026-04-09
-//     Module Name: computer
-//     Description: 32-bit Pipelined CPU mapping to I-Mem and D-Mem
-//////////////////////////////////////////////////////////////////////////////////
-
-
 `include "cpu.sv"
 `include "imem.sv"
 `include "dmem.sv"

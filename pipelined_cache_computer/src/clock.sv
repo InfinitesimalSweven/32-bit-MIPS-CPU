@@ -1,20 +1,6 @@
 `ifndef CLOCK_SV
 `define CLOCK_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2023
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2023-02-07
-//     Module Name: clock
-//     Description: Clock generator; duty cycle = 50%
-//
-// Revision: 1.0
-//
-//////////////////////////////////////////////////////////////////////////////////
-
-
 module clock
     #(parameter ticks = 10)(
     //

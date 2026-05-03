@@ -1,19 +1,6 @@
 `ifndef DMEM_SV
 `define DMEM_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2023
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2023-02-07
-//     Module Name: dmem
-//     Description: 32-bit RISC memory ("data" segment)
-//
-// Revision: 1.0
-//
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module dmem
 // n=bit length of register; r=bit length of addr to limit memory and not crash your verilog emulator

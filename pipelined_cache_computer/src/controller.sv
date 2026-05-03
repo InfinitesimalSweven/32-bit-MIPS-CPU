@@ -1,16 +1,6 @@
 `ifndef CONTROLLER_SV
 `define CONTROLLER_SV
 
-//////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2026
-// Engineer: Prof Rob Marano
-// 
-//     Create Date: 2026-04-09
-//     Module Name: controller
-//     Description: 32-bit RISC-based Pipelined CPU controller (MIPS)
-//////////////////////////////////////////////////////////////////////////////////
-
 
 `include "maindec.sv"
 `include "aludec.sv"
