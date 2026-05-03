@@ -1,5 +1,5 @@
 PROJECT_NAME=pipelined_cpu
-SRCS=tb_computer.sv
+SRCS=tb/tb_computer.sv
 VVPOPTS=-s tb_computer
 # Default assembly program if none is specified
 ASM ?= loop_test

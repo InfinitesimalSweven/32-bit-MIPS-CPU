@@ -2,9 +2,9 @@
 `define CPU_SV
 
 
-`include "controller.sv"
-`include "datapath.sv"
-`include "hazard.sv"
+`include "src/controller.sv"
+`include "src/datapath.sv"
+`include "src/hazard.sv"
 
 module cpu(
     input  logic        clk, reset, intr, mem_stall,
