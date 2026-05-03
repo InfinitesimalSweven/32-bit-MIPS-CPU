@@ -78,7 +78,7 @@ module tb_hazard;
         rsD=5'd3; rtD=5'd4; writeregE=5'd7; regwriteE=1;
         check(0, 0, 2'b00, 2'b00, 0, 0, 0, 0, "NO HAZARD");
 
-        // EX-MEM forwarding: rsE matches writeregM, rsD/rtD kept away from writeregM
+        // EX-MEM forwarding: rsE matches writeregM
         rsD=5'd9; rtD=5'd9;
         rsE=5'd3; rtE=5'd2; writeregM=5'd3; regwriteM=1;
         writeregW=5'd9; regwriteW=1;
@@ -90,11 +90,13 @@ module tb_hazard;
         check(0, 0, 2'b00, 2'b10, 0, 0, 0, 0, "FORWARD bE from MEM stage");
 
         // MEM-WB forwarding: rsE matches writeregW (no MEM match)
+        rsD=5'd1; rtD=5'd2;  // FIX: keep rsD/rtD away from writeregM=9
         rsE=5'd5; rtE=5'd2; writeregM=5'd9; writeregW=5'd5;
         regwriteM=1; regwriteW=1;
         check(0, 0, 2'b01, 2'b00, 0, 0, 0, 0, "FORWARD aE from WB stage");
 
         // MEM-WB forwarding: rtE matches writeregW
+        rsD=5'd1; rtD=5'd2;  // FIX: keep rsD/rtD away from writeregM=9
         rsE=5'd1; rtE=5'd5; writeregM=5'd9; writeregW=5'd5;
         regwriteM=1; regwriteW=1;
         check(0, 0, 2'b00, 2'b01, 0, 0, 0, 0, "FORWARD bE from WB stage");
