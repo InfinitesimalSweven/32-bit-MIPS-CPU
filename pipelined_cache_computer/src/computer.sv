@@ -1,12 +1,12 @@
 `ifndef COMPUTER_SV
 `define COMPUTER_SV
 
-`include "cpu.sv"
-`include "imem.sv"
-`include "dmem.sv"
-`include "cache_direct_mapped.sv"
-`include "cache_set_associative.sv"
-`include "cache_fully_associative.sv"
+`include "src/cpu.sv"
+`include "src/imem.sv"
+`include "src/dmem.sv"
+`include "src/cache_direct_mapped.sv"
+`include "src/cache_set_associative.sv"
+`include "src/cache_fully_associative.sv"
 
 module computer(
     input  logic        clk, reset, intr,

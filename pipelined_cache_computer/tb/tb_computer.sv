@@ -1,8 +1,8 @@
 `ifndef TB_COMPUTER_SV
 `define TB_COMPUTER_SV
 
-`include "_timescale.sv"
-`include "computer.sv"
+`include "src/_timescale.sv"
+`include "src/computer.sv"
 
 module tb_computer;
 

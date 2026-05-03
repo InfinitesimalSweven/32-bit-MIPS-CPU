@@ -1,14 +1,14 @@
 `ifndef DATAPATH_SV
 `define DATAPATH_SV
 
-`include "regfile.sv"
-`include "alu.sv"
-`include "adder.sv"
-`include "sl2.sv"
-`include "mux2.sv"
-`include "mux3.sv"
-`include "signext.sv"
-`include "eqcmp.sv"
+`include "src/regfile.sv"
+`include "src/alu.sv"
+`include "src/adder.sv"
+`include "src/sl2.sv"
+`include "src/mux2.sv"
+`include "src/mux3.sv"
+`include "src/signext.sv"
+`include "src/eqcmp.sv"
 
 module datapath(
     input  logic        clk, reset,

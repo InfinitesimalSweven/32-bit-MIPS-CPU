@@ -2,8 +2,8 @@
 `define CONTROLLER_SV
 
 
-`include "maindec.sv"
-`include "aludec.sv"
+`include "src/maindec.sv"
+`include "src/aludec.sv"
 
 module controller(
     input  logic [5:0] opD, functD,
