@@ -44,14 +44,14 @@ module cache_fully_associative (
     logic miss;
     logic [3:0] hit_index; // Which block matched?
 
-    always_comb begin
+    always @(*) begin
         hit = 1'b0;
         hit_index = 4'b0;
         // Parallel search across all 16 blocks
         for (int i = 0; i < 16; i++) begin
             if (valid_array[i] && (tag_array[i] == tag)) begin
                 hit = 1'b1;
-                hit_index = i[3:0];
+                hit_index = i;
             end
         end
     end
@@ -65,7 +65,7 @@ module cache_fully_associative (
     typedef enum logic { IDLE, FETCHING } state_t;
     state_t state, next_state;
 
-    always_ff @(posedge clk or posedge reset) begin
+    always @(posedge clk or posedge reset) begin
         if (reset) begin
             state <= IDLE;
             replace_ptr <= 4'b0;
@@ -94,7 +94,7 @@ module cache_fully_associative (
         end
     end
 
-    always_comb begin
+    always @(*) begin
         next_state     = state;
         mem_stall      = 0;
         dmem_addr      = cpu_addr;
