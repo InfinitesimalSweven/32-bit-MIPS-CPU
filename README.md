@@ -15,6 +15,7 @@ A fully pipelined 32-bit MIPS processor implemented in SystemVerilog, featuring 
 7. [Instruction Set Architecture (ISA)](#instruction-set-architecture-isa)
 8. [ALU Control Encoding](#alu-control-encoding)
 9. [Control Signal Reference](#control-signal-reference)
+10. [Simulation & Running Programs](#simulation--running-programs)
 
 ---
 
