@@ -278,3 +278,50 @@ Decoded from `maindec.sv`. Control vector: `{regwrite, regdst, alusrc, branch, m
 - `jr  = (op == 6'b000000) && (funct == 6'b001000)`
 
 ---
+
+## Simulation & Running Programs
+
+### Requirements
+- [Icarus Verilog](https://github.com/steveicarus/iverilog) — for compilation and simulation
+- Python 3 — for the assembler
+
+### Running a Program
+```bash
+make ASM=<program_name>
+```
+This will assemble the `.asm` file, compile the SystemVerilog, and run the simulation in one step. Output is written to `debug_output.txt` with cycle-by-cycle pipeline state. Performance metrics are printed to the terminal at the end.
+
+For example, to run the recursive factorial program:
+```bash
+make ASM=prog_3_recursive
+```
+
+If no program is specified, `loop_test` is used by default.
+
+If the assembly file is not found, the Makefile will list all available programs in the `programs/` directory.
+
+### Cache Control
+The cache is enabled by default. To bypass it and access data memory directly:
+```bash
+make ASM=<program_name> CACHE_EN=0
+```
+This is useful for benchmarking the performance impact of the cache.
+
+### Exception Testing
+A separate testbench is provided for exception/interrupt handling:
+```bash
+make test_exceptions
+```
+
+### Output Files
+| File | Contents |
+|------|----------|
+| `debug_output.txt` | Cycle-by-cycle pipeline state for all 5 stages |
+| `pipelined_cpu.vvp` | Compiled simulation binary (Icarus Verilog) |
+| `tb_computer.vcd` | Waveform dump, open with GTKWave for signal visualization |
+
+### Cleaning Up
+```bash
+make clean
+```
+Removes all generated `.vvp`, `.vcd`, and `debug_output.txt` files.
