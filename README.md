@@ -15,7 +15,6 @@ A fully pipelined 32-bit MIPS processor implemented in SystemVerilog, featuring 
 7. [Instruction Set Architecture (ISA)](#instruction-set-architecture-isa)
 8. [ALU Control Encoding](#alu-control-encoding)
 9. [Control Signal Reference](#control-signal-reference)
-10. [Simulation & Running Programs](#simulation--running-programs)
 
 ---
 
@@ -279,20 +278,3 @@ Decoded from `maindec.sv`. Control vector: `{regwrite, regdst, alusrc, branch, m
 - `jr  = (op == 6'b000000) && (funct == 6'b001000)`
 
 ---
-
-## Simulation & Running Programs
-
-Programs are provided as hex files loaded at simulation start.
-
-**Default program files:**
-- Instruction memory: `test_prog.exe`
-- Data memory (`mem.sv` legacy module): `fib_prog.exe`
-
-**Override at runtime using plusargs:**
-```
-+PROG=my_program.exe
-```
-
-**Timescale:** `1ns / 100ps` (defined globally in `_timescale.sv`)
-
-**Cache enable:** The `cache_en` input on `computer` selects between the cache path and direct DMEM access. Set `cache_en = 1` to route through the fully associative cache; set `cache_en = 0` to bypass it entirely (the pipeline will still stall until `dmem_ready`).
