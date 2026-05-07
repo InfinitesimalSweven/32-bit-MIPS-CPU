@@ -1,5 +1,5 @@
 `timescale 1ns/1ps
-`include "adder.sv"
+`include "src/adder.sv"
 
 module tb_adder;
 

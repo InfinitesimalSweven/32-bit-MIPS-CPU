@@ -1,13 +1,18 @@
 PROJECT_NAME=pipelined_cpu
-SRCS=tb/tb_computer.sv
-VVPOPTS=-s tb_computer
+SRCS=src/*.sv
 # Default assembly program if none is specified
-ASM ?= loop_test
+ASM ?= prog_0_simple
 PROG_DIR = ../programs
 TOOLS_DIR = ../tools
 
 # Default cache state (1=enabled, 0=disabled)
 CACHE_EN ?= 1
+
+# Individual components
+COMPONENTS = alu adder aludec controller datapath hazard regfile maindec \
+             cache_direct_mapped cache_fully_associative cache_set_associative \
+             cpu dff dmem eqcmp flopenr flopenrc \
+             imem mem mux2 mux3 mux4 signext sl2
 
 all: clean check_asm asm compile run
 
@@ -20,7 +25,7 @@ check_asm:
 	fi
 
 compile:
-	iverilog -g2012 -o $(PROJECT_NAME).vvp $(SRCS)
+	iverilog -g2012 -I src -o $(PROJECT_NAME).vvp tb/tb_computer.sv $(SRCS)
 
 run:
 	vvp $(PROJECT_NAME).vvp +PROG=$(PROG_DIR)/$(ASM).exe +CACHE_EN=$(CACHE_EN) > debug_output.txt
@@ -30,10 +35,16 @@ run:
 asm:
 	python3 $(TOOLS_DIR)/assembler.py $(PROG_DIR)/$(ASM).asm $(PROG_DIR)/$(ASM).exe
 
+# Individual component testbenches: make alu, make hazard, etc.
+$(COMPONENTS): clean
+	iverilog -g2012 -I src -o tb_$@.vvp tb/tb_$@.sv $(SRCS)
+	vvp tb_$@.vvp > debug_output.txt
+	@echo "\nDone! Check debug_output.txt for output."
+
 test_exceptions: clean
 	@echo "Running Exception Testbench..."
 	python3 $(TOOLS_DIR)/assembler.py $(PROG_DIR)/test_exceptions.asm $(PROG_DIR)/test_exceptions.exe
-	iverilog -g2012 -o exceptions.vvp tb_exceptions.sv
+	iverilog -g2012 -I src -o exceptions.vvp tb/tb_exceptions.sv $(SRCS)
 	vvp exceptions.vvp +PROG=$(PROG_DIR)/test_exceptions.exe > debug_output.txt
 	@echo "\nSimulation complete! Check debug_output.txt for cycle-by-cycle logs."
 
