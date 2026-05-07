@@ -9,13 +9,15 @@ A fully pipelined 32-bit MIPS processor implemented in SystemVerilog, featuring 
 1. [Architecture Overview](#architecture-overview)
 2. [File Structure](#file-structure)
 3. [Pipeline](#pipeline)
-4. [Hazard Handling](#hazard-handling)
-5. [Cache Subsystem](#cache-subsystem)
-6. [Memory Model](#memory-model)
-7. [Instruction Set Architecture (ISA)](#instruction-set-architecture-isa)
-8. [ALU Control Encoding](#alu-control-encoding)
-9. [Control Signal Reference](#control-signal-reference)
-10. [Simulation & Running Programs](#simulation--running-programs)
+4. [Timing Diagrams](#timing-diagrams)
+5. [Hazard Handling](#hazard-handling)
+6. [Cache Subsystem](#cache-subsystem)
+7. [Memory Model](#memory-model)
+8. [Instruction Set Architecture (ISA)](#instruction-set-architecture-isa)
+9. [ALU Control Encoding](#alu-control-encoding)
+10. [Control Signal Reference](#control-signal-reference)
+11. [Simulation & Running Programs](#simulation--running-programs)
+12. [Youtube Video](#youtube-video)
 
 ---
 
@@ -339,3 +341,5 @@ make test_exceptions
 make clean
 ```
 Removes all generated `.vvp`, `.vcd`, and `debug_output.txt` files.
+
+## Youtube Videos
