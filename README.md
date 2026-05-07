@@ -112,6 +112,19 @@ The processor implements a classic 5-stage MIPS pipeline:
 
 ---
 
+## Timing Diagrams
+
+### R-Type: `add $t2, $t0, $t1`
+![R-Type Timing Diagram](diagrams/rtype_timing.png)
+
+### I-Type: `sw $t0, 84($zero)`
+![I-Type Timing Diagram](diagrams/itype_timing.png)
+
+### J-Type: `jal` / `jr $ra`
+![J-Type Timing Diagram](diagrams/jtype_timing.png)
+
+---
+
 ## Hazard Handling
 
 All hazard logic is centralized in `hazard.sv`.
