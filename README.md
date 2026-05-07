@@ -9,12 +9,15 @@ A fully pipelined 32-bit MIPS processor implemented in SystemVerilog, featuring 
 1. [Architecture Overview](#architecture-overview)
 2. [File Structure](#file-structure)
 3. [Pipeline](#pipeline)
-4. [Hazard Handling](#hazard-handling)
-5. [Cache Subsystem](#cache-subsystem)
-6. [Memory Model](#memory-model)
-7. [Instruction Set Architecture (ISA)](#instruction-set-architecture-isa)
-8. [ALU Control Encoding](#alu-control-encoding)
-9. [Control Signal Reference](#control-signal-reference)
+4. [Timing Diagrams](#timing-diagrams)
+5. [Hazard Handling](#hazard-handling)
+6. [Cache Subsystem](#cache-subsystem)
+7. [Memory Model](#memory-model)
+8. [Instruction Set Architecture (ISA)](#instruction-set-architecture-isa)
+9. [ALU Control Encoding](#alu-control-encoding)
+10. [Control Signal Reference](#control-signal-reference)
+11. [Simulation & Running Programs](#simulation--running-programs)
+12. [Youtube Video](#youtube-video)
 
 ---
 
@@ -108,6 +111,19 @@ The processor implements a classic 5-stage MIPS pipeline:
 ### Stage 5 — Writeback (WB)
 - 3-way result mux selects between: ALU result, memory read data, or `pcplus4` (for JAL)
 - Writes to register file on **negedge clk** (avoids write-then-read hazard within same cycle)
+
+---
+
+## Timing Diagrams
+
+### R-Type: `add $t2, $t0, $t1`
+![R-Type Timing Diagram](diagrams/rtype_timing.png)
+
+### I-Type: `sw $t0, 84($zero)`
+![I-Type Timing Diagram](diagrams/itype_timing.png)
+
+### J-Type: `jal` / `jr $ra`
+![J-Type Timing Diagram](diagrams/jtype_timing.png)
 
 ---
 
@@ -278,3 +294,52 @@ Decoded from `maindec.sv`. Control vector: `{regwrite, regdst, alusrc, branch, m
 - `jr  = (op == 6'b000000) && (funct == 6'b001000)`
 
 ---
+
+## Simulation & Running Programs
+
+### Requirements
+- [Icarus Verilog](https://github.com/steveicarus/iverilog) — for compilation and simulation
+- Python 3 — for the assembler
+
+### Running a Program
+```bash
+make ASM=<program_name>
+```
+This will assemble the `.asm` file, compile the SystemVerilog, and run the simulation in one step. Output is written to `debug_output.txt` with cycle-by-cycle pipeline state. Performance metrics are printed to the terminal at the end.
+
+For example, to run the recursive factorial program:
+```bash
+make ASM=prog_3_recursive
+```
+
+If no program is specified, `loop_test` is used by default.
+
+If the assembly file is not found, the Makefile will list all available programs in the `programs/` directory.
+
+### Cache Control
+The cache is enabled by default. To bypass it and access data memory directly:
+```bash
+make ASM=<program_name> CACHE_EN=0
+```
+This is useful for benchmarking the performance impact of the cache.
+
+### Exception Testing
+A separate testbench is provided for exception/interrupt handling:
+```bash
+make test_exceptions
+```
+
+### Output Files
+| File | Contents |
+|------|----------|
+| `debug_output.txt` | Cycle-by-cycle pipeline state for all 5 stages |
+| `pipelined_cpu.vvp` | Compiled simulation binary (Icarus Verilog) |
+| `tb_computer.vcd` | Waveform dump, open with GTKWave for signal visualization |
+
+### Cleaning Up
+```bash
+make clean
+```
+Removes all generated `.vvp`, `.vcd`, and `debug_output.txt` files.
+
+## Youtube Videos
