@@ -3,7 +3,7 @@
 
 module dff
     #(parameter n = 32)(
-    //
+    //M 
     // ---------------- PORT DEFINITIONS ----------------
     //
     input  logic CLOCK, RESET,

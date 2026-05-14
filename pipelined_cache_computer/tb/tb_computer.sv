@@ -45,23 +45,23 @@ module tb_computer;
     string C_GRY  = "\033[1;30m";
 
     always @(posedge clk) begin
-        // String builders for visual indicators
         string stallF_str, stallD_str, flushD_str, flushE_str, memwrite_str, regwrite_str;
 
         if (!reset) begin
             cycle++;
             
-            if (dut.mips_pipelined.dp.instrD != 32'b0 && !dut.mips_pipelined.stallD) begin
+            // Count instructions that aren't NOPs and aren't stalled
+            if (dut.mips_pipelined.dp.instrD !== 32'b0 && !dut.mips_pipelined.stallD) begin
                 instr_count++;
             end
 
-            // Track Hits and Misses in the Cache module
+            // Track Hits and Misses in the Data Cache
             if ((dut.dcache.cpu_memread || dut.dcache.cpu_memwrite) && dut.dcache.state == 0) begin
                 if (dut.dcache.hit) cache_hits++;
                 if (dut.dcache.miss) cache_misses++;
             end
 
-            
+            // UI Formatting
             if (dut.mips_pipelined.stallD) stallF_str = {C_YEL, ">> STALLED <<", C_RST}; else stallF_str = "      -      ";
             if (dut.mips_pipelined.stallD) stallD_str = {C_YEL, ">> STALLED <<", C_RST}; else stallD_str = "      -      ";
             if (dut.mips_pipelined.flushD) flushD_str = {C_RED, ">> FLUSHED <<", C_RST}; else flushD_str = "      -      ";
@@ -95,7 +95,7 @@ module tb_computer;
     end
 
     initial begin
-        #100000; // Increased timeout for slow dmem loops
+        #1000000; 
         $display("Testbench timeout");
         $finish;
     end
@@ -103,41 +103,45 @@ module tb_computer;
     // check results and print performance metrics on halt
     always @(negedge clk) begin
         if (memwrite) begin
+            // Check for specific verification addresses
             if (dataadr === 84 && writedata === 12) begin
                 $display("\n%sSuccess: mem[84] evaluates to 12. Arithmetic RAW Forwarding logic mapped correctly.%s", C_GRN, C_RST);
-            end else if (dataadr === 88 && writedata === 24) begin
+            end 
+            else if (dataadr === 88 && writedata === 24) begin
                 $display("\n%sExtravagant Success: mem[88] evaluates to 24. Pipelined Branch Flushes and Load-Use Stalls executed perfectly!%s", C_GRN, C_RST);
-                $display("\n╭─────────────────────────────────────────────────────────────────────────────────────────────────╮");
-                $display("│ %-95s │", "Program successfully completed all verification steps.");
-                $display("├─────────────────────────────────────────────────────────────────────────────────────────────────┤");
-                $display("│ PERFORMANCE METRICS:                                                                            │");
-                $display("│ %-95s │", $sformatf("Total Clock Cycles: %0d", cycle));
-                $display("│ %-95s │", $sformatf("Instructions Executed: ~%0d", instr_count));
-                $display("│ %-95s │", $sformatf("Effective CPI: %0.2f", real'(cycle) / real'(instr_count)));
-                $display("│ %-95s │", $sformatf("Cache Hits: %0d", cache_hits));
-                $display("│ %-95s │", $sformatf("Cache Misses: %0d", cache_misses));
-                $display("╰─────────────────────────────────────────────────────────────────────────────────────────────────╯\n");
+                print_final_status("Verification Complete: All tests passed.");
                 $finish;
             end
-            
-            // Universal Memory-Mapped I/O Halt
-            if (dataadr === 252) begin
-                $display("\n╭─────────────────────────────────────────────────────────────────────────────────────────────────╮");
-                $display("│ %-95s │", "Program gracefully halted via Memory-Mapped I/O.");
-                $display("├─────────────────────────────────────────────────────────────────────────────────────────────────┤");
-                $display("│ PERFORMANCE METRICS:                                                                            │");
-                $display("│ %-95s │", $sformatf("Total Clock Cycles: %0d", cycle));
-                $display("│ %-95s │", $sformatf("Instructions Executed: ~%0d", instr_count));
-                $display("│ %-95s │", $sformatf("Effective CPI: %0.2f", real'(cycle) / real'(instr_count)));
-                $display("│ %-95s │", $sformatf("Cache Hits: %0d", cache_hits));
-                $display("│ %-95s │", $sformatf("Cache Misses: %0d", cache_misses));
-                $display("╰─────────────────────────────────────────────────────────────────────────────────────────────────╯\n");
+            // Check for Halt Address (0xFC / 252)
+            else if (dataadr === 252) begin
+                print_final_status("Program gracefully halted via Memory-Mapped I/O.");
                 $finish;
             end
         end
     end
 
-endmodule
+    // Task to dump register values and show final summary
+    task print_final_status(string message);
+        begin
+            $display("\n--- FINAL REGISTER FILE CONTENTS ---");
+            for (int i = 0; i < 32; i++) begin
+                // Hierarchical Path: dut (computer) -> mips_pipelined (cpu) -> dp (datapath) -> rf (regfile) -> rf (array)
+                $display("Reg[%2d] = 0x%h (%0d)", i, dut.mips_pipelined.dp.rf.rf[i], dut.mips_pipelined.dp.rf.rf[i]);
+            end
 
+            $display("\n╭─────────────────────────────────────────────────────────────────────────────────────────────────╮");
+            $display("│ %-95s │", message);
+            $display("├─────────────────────────────────────────────────────────────────────────────────────────────────┤");
+            $display("│ PERFORMANCE METRICS:                                                                            │");
+            $display("│ %-95s │", $sformatf("Total Clock Cycles: %0d", cycle));
+            $display("│ %-95s │", $sformatf("Instructions Executed: ~%0d", instr_count));
+            $display("│ %-95s │", $sformatf("Effective CPI: %0.2f", real'(cycle) / real'(instr_count)));
+            $display("│ %-95s │", $sformatf("Cache Hits: %0d", cache_hits));
+            $display("│ %-95s │", $sformatf("Cache Misses: %0d", cache_misses));
+            $display("╰─────────────────────────────────────────────────────────────────────────────────────────────────╯\n");
+        end
+    endtask
+
+endmodule
 
 `endif // TB_COMPUTER_SV

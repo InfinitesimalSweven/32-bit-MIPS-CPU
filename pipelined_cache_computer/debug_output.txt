@@ -1,9 +1,0 @@
-ERROR: ./src/imem.sv:25: $readmemh: Unable to open test_prog.exe for reading.
-ERROR: src/mem.sv:17: $readmemh: Unable to open fib_prog.exe for reading.
-VCD info: dumpfile tb_mux3.vcd opened for output.
-PASS TEST 1: s=00 y=aa
-PASS TEST 2: s=01 y=bb
-PASS TEST 3: s=10 y=cc
-PASS TEST 4: s=11 y=xx
-Done.
-tb/tb_mux3.sv:23: $finish called at 40 (100ps)

@@ -47,10 +47,12 @@ module datapath(
     logic [31:0] pcjumpFD;
     assign pcjumpFD = {pcplus4D[31:28], instrD[25:0], 2'b00};
     
-    // NEW: jr selects srcaD as next PC; takes priority over normal jump
+    // jr uses compaD (forwarded) instead of srcaD (raw regfile) so that
+    // MEM-stage results are available. The jrstall in the hazard unit
+    // handles the remaining case where lw is in MEM (data not yet forwarded).
     always_comb begin
         if (Exception_Flag) pcnextFD = 32'h8000_0180;
-        else if (jrD)       pcnextFD = srcaD;
+        else if (jrD)       pcnextFD = compaD;   // FIX: was srcaD
         else if (jumpD)     pcnextFD = pcjumpFD;
         else                pcnextFD = pcnextbrFD;
     end
@@ -68,7 +70,7 @@ module datapath(
             instrD   <= 32'b0;
             pcplus4D <= 32'b0;
         end else if (~stallD) begin
-            instrD   <= (pcsrcD || jumpD || jrD) ? 32'b0 : instrF; // NEW: flush on jr too
+            instrD   <= (pcsrcD || jumpD || jrD) ? 32'b0 : instrF;
             pcplus4D <= pcplus4F;
         end
     end
@@ -102,7 +104,7 @@ module datapath(
     logic        memwriteE, alusrcE, regdstE;
     logic [3:0]  alucontrolE;
     logic [31:0] pcplus4E;
-    logic        jalE;                       // NEW: pipeline jal to EX
+    logic        jalE;
 
     always_ff @(posedge clk or posedge reset) begin
         if (reset || flushE) begin
@@ -119,7 +121,7 @@ module datapath(
             rtE         <= 0;
             rdE         <= 0;
             pcplus4E    <= 0;
-            jalE        <= 0;               // NEW
+            jalE        <= 0;
         end else if (~stallE) begin
             regwriteE   <= regwriteD;
             memtoregE   <= memtoregD;
@@ -134,7 +136,7 @@ module datapath(
             rtE         <= rtD;
             rdE         <= rdD;
             pcplus4E    <= pcplus4D;
-            jalE        <= jalD;            // NEW
+            jalE        <= jalD;
         end
     end
 
@@ -143,11 +145,11 @@ module datapath(
     logic [31:0] aluoutE;
     logic zeroE;
     
-        mux3 #(32) forwardamux(srcaE, resultW, aluoutM, forwardaE, srca2E);
+    mux3 #(32) forwardamux(srcaE, resultW, aluoutM, forwardaE, srca2E);
     mux3 #(32) forwardbmux(srcbE, resultW, aluoutM, forwardbE, srcb2E);
     mux2 #(32) srcbmux(srcb2E, signimmE, alusrcE, srcb3E);
     alu alu(clk, srca2E, srcb3E, alucontrolE, aluoutE, zeroE);
-    // NEW: jal overrides writereg to 31; otherwise normal rd/rt selection
+
     logic [4:0] writeregE_normal;
     mux2 #(5) wrmux(rtE, rdE, regdstE, writeregE_normal);
     assign writeregE = jalE ? 5'd31 : writeregE_normal;
@@ -155,13 +157,13 @@ module datapath(
     // Exception tracking Register
     logic [31:0] EPC;
     always_ff @(posedge clk or posedge reset) begin
-        if (reset)           EPC <= 32'b0;
+        if (reset)               EPC <= 32'b0;
         else if (Exception_Flag) EPC <= pcplus4D - 32'd4;
     end
  
     // --- EX/MEM REGISTER ---
-    logic        jalM;                       // NEW: pipeline jal to MEM
-    logic [31:0] pcplus4M;                  // NEW: pipeline pcplus4 to MEM
+    logic        jalM;
+    logic [31:0] pcplus4M;
     always_ff @(posedge clk or posedge reset) begin
         if (reset) begin
             regwriteM     <= 0;
@@ -170,8 +172,8 @@ module datapath(
             aluoutM       <= 0;
             writedataM    <= 0;
             writeregM     <= 0;
-            jalM          <= 0;             // NEW
-            pcplus4M      <= 0;             // NEW
+            jalM          <= 0;
+            pcplus4M      <= 0;
         end else if (~stallM) begin
             regwriteM     <= regwriteE;
             memtoregM     <= memtoregE;
@@ -179,14 +181,14 @@ module datapath(
             aluoutM       <= aluoutE;
             writedataM    <= srcb2E;
             writeregM     <= writeregE;
-            jalM          <= jalE;          // NEW
-            pcplus4M      <= pcplus4E;      // NEW
+            jalM          <= jalE;
+            pcplus4M      <= pcplus4E;
         end
     end
  
     // --- MEM/WB REGISTER ---
-    logic        memtoregW, jalW;           // NEW: jalW
-    logic [31:0] readdataW, aluoutW, pcplus4W; // NEW: pcplus4W
+    logic        memtoregW, jalW;
+    logic [31:0] readdataW, aluoutW, pcplus4W;
     always_ff @(posedge clk or posedge reset) begin
         if (reset) begin
             regwriteW <= 0;
@@ -194,20 +196,19 @@ module datapath(
             readdataW <= 0;
             aluoutW   <= 0;
             writeregW <= 0;
-            jalW      <= 0;                 // NEW
-            pcplus4W  <= 0;                 // NEW
+            jalW      <= 0;
+            pcplus4W  <= 0;
         end else if (~stallW) begin
             regwriteW <= regwriteM;
             memtoregW <= memtoregM;
             readdataW <= readdataM;
             aluoutW   <= aluoutM;
             writeregW <= writeregM;
-            jalW      <= jalM;              // NEW
-            pcplus4W  <= pcplus4M;          // NEW
+            jalW      <= jalM;
+            pcplus4W  <= pcplus4M;
         end
     end
  
-    // NEW: jal selects pcplus4W as writeback result instead of ALU/memory
     mux3 #(32) resmux(aluoutW, readdataW, pcplus4W, {jalW, memtoregW}, resultW);
  
     assign jalE_out = jalE;

@@ -1,7 +1,6 @@
 `ifndef CPU_SV
 `define CPU_SV
 
-
 `include "src/controller.sv"
 `include "src/datapath.sv"
 `include "src/hazard.sv"
@@ -41,21 +40,16 @@ module cpu(
 
     datapath dp(
         .clk(clk), .reset(reset),
-        // Ext Mem
         .pcF(pcF), .instrF(instrF),
         .aluoutM(aluoutM), .writedataM(writedataM), .readdataM(readdataM),
-        // From Controller
         .memtoregD(memtoregD), .memwriteD(memwriteD),
         .alusrcD(alusrcD), .regdstD(regdstD), .regwriteD(regwriteD),
         .branchD(branchD), .jumpD(jumpD), .jalD(jalD), .jrD(jrD), .alucontrolD(alucontrolD),
-        // To Controller
         .instrD(instrD),
-        // From Hazard Unit
         .stallF(stallF), .stallD(stallD), .stallE(stallE), .stallM(stallM), .stallW(stallW), .flushE(flushE), .flushD(flushD),
         .Exception_Flag(Exception_Flag),
         .forwardaD(forwardaD), .forwardbD(forwardbD),
         .forwardaE(forwardaE), .forwardbE(forwardbE),
-        // To Hazard Unit
         .rsD(rsD), .rtD(rtD), .rsE(rsE), .rtE(rtE),
         .writeregE(writeregE), .writeregM(writeregM), .writeregW(writeregW),
         .regwriteE(regwriteE), .regwriteM(regwriteM), .regwriteW(regwriteW),
@@ -72,6 +66,7 @@ module cpu(
         .regwriteE(regwriteE), .regwriteM(regwriteM), .regwriteW(regwriteW),
         .memtoregE(memtoregE), .memtoregM(memtoregM), .branchD(branchD),
         .jalE(jalE), .jalM(jalM), .jalW(jalW),
+        .jrD(jrD),              // FIX: wire jrD so hazard can detect lw->jr stall
         .intr(intr),
         .forwardaD(forwardaD), .forwardbD(forwardbD),
         .forwardaE(forwardaE), .forwardbE(forwardbE),
@@ -79,7 +74,6 @@ module cpu(
         .stallF(stallF), .stallD(stallD), .stallE(stallE), .stallM(stallM), .stallW(stallW), .flushE(flushE), .flushD(flushD),
         .Exception_Flag(Exception_Flag)
     );
-
 
 endmodule
 
