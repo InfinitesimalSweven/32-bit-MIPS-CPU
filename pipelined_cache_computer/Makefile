@@ -10,7 +10,7 @@ CACHE_EN ?= 1
 
 # Individual components
 COMPONENTS = alu adder aludec controller datapath hazard regfile maindec \
-             cache_direct_mapped cache_fully_associative cache_set_associative \
+             cache_direct_mapped \
              cpu dff dmem eqcmp flopenr flopenrc \
              imem mem mux2 mux3 mux4 signext sl2
 

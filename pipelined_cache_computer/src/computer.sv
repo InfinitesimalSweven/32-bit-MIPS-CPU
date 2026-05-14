@@ -5,8 +5,7 @@
 `include "src/imem.sv"
 `include "src/dmem.sv"
 `include "src/cache_direct_mapped.sv"
-`include "src/cache_set_associative.sv"
-`include "src/cache_fully_associative.sv"
+
 
 module computer(
     input  logic        clk, reset, intr,
@@ -35,7 +34,7 @@ module computer(
     );
 
     // Cache arrays
-    cache_fully_associative dcache (
+    cache_direct_mapped dcache (
         .clk(clk),
         .reset(reset),
         .cpu_addr(dataadr),
