@@ -45,6 +45,12 @@ The top-level `computer` module wires together:
 - Latency-modeled data memory (`dmem`) with a `dmem_ready` handshake
 - A `cache_en` bypass switch allowing direct CPU→DMEM access
 
+### CPU Pipeline
+![CPU_Pipeline_Diagram](diagrams/mips_cpu_pipeline_diagram.svg)
+
+### Memory Hierarchy
+![Memory_Hierarchy_Diagram](diagrams/mips_memory_hierarchy_diagram.svg)
+
 ---
 
 ## File Structure
