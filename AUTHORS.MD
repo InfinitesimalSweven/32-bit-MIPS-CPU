@@ -5,7 +5,7 @@
 | Name | GitHub / Email |
 |------|---------------|
 | Natesh Garg | `InfinitesimalSweven` · natgarg132@gmail.com |
-| Tanzeem Hasan | tanzeem.hasan@cooper.edu |
+| Tanzeem Hasan | `thasan50` · tanzeem.hasan@cooper.edu |
 
 ---
 
@@ -23,8 +23,6 @@
 | `aludec.sv` | Tanzeem Hasan | Minor fix |
 | `hazard.sv` | Tanzeem Hasan | JAL forwarding support added; major rework by Natesh for program 3 |
 | `cache_direct_mapped.sv` | Natesh Garg | Full implementation |
-| `cache_set_associative.sv` | Natesh Garg | Full implementation (later replaced by fully-associative) |
-| `cache_fully_associative.sv` | Natesh Garg | Full implementation; selected as active cache in final design |
 | `dmem.sv` | Tanzeem Hasan | Latency-modeled data memory |
 | `imem.sv` | Tanzeem Hasan | Instruction ROM |
 | `alu.sv` | Tanzeem Hasan | 32-bit ALU |
@@ -56,8 +54,6 @@
 | `tb_alu.sv` | Natesh Garg | ALU testbench |
 | `tb_regfile.sv` | Natesh Garg | Register file testbench |
 | `tb_cache_direct_mapped.sv` | Natesh Garg | Direct-mapped cache testbench |
-| `tb_cache_set_associative.sv` | Natesh Garg | Set-associative cache testbench (removed in final commit) |
-| `tb_cache_fully_associative.sv` | Natesh Garg | Fully-associative cache testbench (removed in final commit) |
 | `tb_adder.sv` | Tanzeem Hasan | Adder testbench |
 | `tb_dmem.sv` | Natesh Garg | Data memory testbench |
 | `tb_imem.sv` | Natesh Garg | Instruction memory testbench |

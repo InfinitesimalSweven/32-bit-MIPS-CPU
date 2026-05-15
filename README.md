@@ -46,12 +46,90 @@ The top-level `computer` module wires together:
 - A `cache_en` bypass switch allowing direct CPU→DMEM access
 
 ### CPU Pipeline
-![CPU_Pipeline_Diagram](diagrams/mips_cpu_pipeline_diagram.svg)
+```
+=============================================================================
+                   MIPS Pipelined CPU — Datapath Overview
+=============================================================================
+
+  ┌────────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌────────┐
+->│ Fetch  │-->│ Decode │-->│ Exec   │-->│ Memory │-->│ W-Back │
+  └────────┘   └────────┘   └────────┘   └────────┘   └────────┘
+      │            │            │            │            │
+      v            v            v            v            v
+    [PC]       [Regfile]      [ALU]       [DCache]    [Res Mux]
+  Reset->0x0   32x32 regs  add/sub/etc    lw / sw     ALU/mem/PC
+      │            │            │
+      v            v            v
+  [Next PC]   [Sign-ext]   [Fwd Mux]
+  br/j/exc    imm->32bit   reg/WB/MEM
+                   │            │
+                   v            v
+             [Controller]  [Write Mux]
+               main/alu    rd/rt/$31
+
+-----------------------------------------------------------------------------
+                            HAZARD UNIT
+       (Load-use • Branch stall • Forwarding • Exception flush)
+-----------------------------------------------------------------------------
+      │            │            │            │            │
+      v            v            v            v            v
+  [stallF/D]   [flushD]     [flushE]   [stallE/M/W]  [Exception]
+
+-----------------------------------------------------------------------------
+              CONTROL SIGNALS (ID -> EX -> MEM -> WB)
+-----------------------------------------------------------------------------
+         [memtoreg/memwrite]  [branch/jump]  [alucontrol]  [regwrite/regdst]
+
+-----------------------------------------------------------------------------
+                           SUPPORTED OPS
+-----------------------------------------------------------------------------
+    [R-type]      [I-type]      [J-type]      [Illegal]
+    add/sub/or    lw/sw/beq     j/jal         NOP
+=============================================================================
+```
 
 ### Memory Hierarchy
-![Memory_Hierarchy_Diagram](diagrams/mips_memory_hierarchy_diagram.svg)
+```
+================================================================================
+                    MIPS Memory & Cache Hierarchy (Direct-Mapped)
+================================================================================
 
----
+      [ IMEM (Instr ROM) ]          [ CPU (Pipelined) ]
+      256-word ROM          <──────  pcF • aluoutM • memwrite
+      (addr [9:2])          ──────>  instrF • mem_stall
+               ^                              │
+               │                              │ addr / data
+               │                              v
+               │                    [ cache_en bypass mux ]
+               │                     0 -> direct to DMEM
+               │                     1 -> use cache ────┐
+               │                                        │
+               │          (cache_en=0)                  │ (cache_en=1)
+               │         ┌──────────────────────────────┘
+               │         │
+               │         v
+               │    ┌──────────────────────────────────────────────────┐
+               │    │            CACHE LAYER (Direct-Mapped)           │
+               │    │  [16 blocks] index: [5:2] | tag: [31:6]          │
+               │    ├─────────────────────────┬────────────────────────┤
+               │    │        Hit Path         │       Miss Path        │
+               │    │  cpu_readdata <─ data   │  stall=1, fetch DMEM   │
+               │    └────────────┬────────────┴──────────┬─────────────┘
+               │                 │                       │
+               │                 │ dmem_addr / r/w       │
+               │                 v                       v
+               │    [ DMEM (Main Data Memory) ] <────────┘
+               │    LATENCY = 10 cycles • 256-word RAM
+               │                 │
+               │                 v
+               │    [ Latency counter (3:0) ]
+               └──── counts 0 -> 9, then dmem_ready=1
+
+================================================================================
+  ADDRESS LAYOUT (Direct-Mapped):
+  [31:6] Tag (26-bit) | [5:2] Index (4-bit -> 16 sets) | [1:0] Offset (ignored)
+================================================================================
+```
 
 ## File Structure
 
