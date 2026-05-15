@@ -349,3 +349,4 @@ make clean
 Removes all generated `.vvp`, `.vcd`, and `debug_output.txt` files.
 
 ## Youtube Videos
+https://youtu.be/L6kiW3U7ot8
